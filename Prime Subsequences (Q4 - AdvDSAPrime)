@@ -1,0 +1,32 @@
+public class Solution {
+    public int solve(ArrayList<Integer> A) {
+
+    int answer=1;
+    boolean flag=true;
+    int count=0;
+
+    //find the count of prime numbers.
+    for(int i=0;i<A.size();i++){
+        flag=true;
+        for(int j=2;j*j<=A.get(i);j++){
+            if(A.get(i) % j == 0){
+                flag=false;
+                break;
+            }
+        }
+        if(flag && A.get(i)!=1){
+            count++;
+        }
+    }
+
+    //With N prime numbers, (NC1 + NC2 + NC3 + ... + NCN) subsequences can be formed.
+    //(NC1 + NC2 + NC3 + ... + NCN) is nothing but all possible combinations except NC0.
+    //Total of all possible combinations can be written as (2^N). 
+    //When NC0 is subtracted, there can be (2^N - 1) subsequences formed out of N prime numbers
+    for(int k=1; k<=count; k++){
+        answer=(answer*2) % 1000000007;
+    }    
+
+    return answer-1;        
+    }
+}
