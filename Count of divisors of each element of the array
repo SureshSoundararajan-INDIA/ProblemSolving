@@ -1,0 +1,92 @@
+Problem Description
+Given an array of integers A, find and return the count of divisors of each element of the array.
+
+NOTE: The order of the resultant array should be the same as the input array.
+
+
+Problem Constraints
+1 <= length of the array <= 100000
+1 <= A[i] <= 106
+
+//Approach 1:
+public class Solution {
+    public ArrayList<Integer> solve(ArrayList<Integer> A) {
+
+    ArrayList<Integer> answer=new ArrayList<Integer>();
+    int count=0;
+        for(int i=0;i<A.size();i++){
+            count=0;
+            for(int j=1;j*j<=A.get(i);j++){
+                if(A.get(i)%j==0){
+                    if(j*j != A.get(i))
+                        count=count+2;
+                    else
+                        count=count+1;
+                }
+            }
+            answer.add(count);
+        }
+
+    return answer;
+    }
+}
+
+
+
+
+//Approach 2:
+public class Solution {
+    public ArrayList<Integer> solve(ArrayList<Integer> A) {
+
+    ArrayList<Integer> answer=new ArrayList<Integer>();
+    ArrayList<Integer> spf=new ArrayList<Integer>();
+
+    //find max
+    int max=Integer.MIN_VALUE;
+    for(int i=0;i<A.size();i++){
+        max=Math.max(A.get(i), max);
+    }
+
+    //create SPF Array from 2 to max
+    for(int i=0;i<=max;i++){
+        spf.add(i);
+    }
+
+    for(int i=2; i*i<=max; i++){
+        if(spf.get(i) == i){
+            for(int j=i*i; j<=max; j=j+i){
+                spf.set(j, Math.min(spf.get(j), i));
+            }
+        }
+    }
+
+    //find count of divisors for each element
+    int total=0;
+    int count=0;
+    int N=0;
+    int factor=0;
+    for(int i=0;i<A.size();i++){
+        total=1;
+        count=0;
+        N=A.get(i);
+        factor=spf.get(N);
+            
+        while(N>1){
+            if(N % factor == 0){
+                count++;
+                N = N / factor;
+            }else{
+                factor = spf.get(N);
+                total = total * (count + 1);
+                count=0;
+            }
+            if(N==1){
+                total = total * (count + 1);
+            }
+        }
+        answer.add(total);
+    }
+
+    return answer;
+    }
+}
